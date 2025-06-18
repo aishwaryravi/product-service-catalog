@@ -1,0 +1,30 @@
+The push refers to repository [767397705569.dkr.ecr.us-east-1.amazonaws.com/product-service-dev]
+71d8aa687ff6: Preparing
+b7f087dc5dd3: Preparing
+bc3af35429d2: Preparing
+0fd8c731294d: Preparing
+a466089751d3: Preparing
+cd4d5518888c: Preparing
+4e8c1ac62530: Preparing
+f0d3b09df3b4: Preparing
+b9a50396677d: Preparing
+be76169c9d2c: Preparing
+7fb72a7d1a8e: Preparing
+4e8c1ac62530: Waiting
+f0d3b09df3b4: Waiting
+b9a50396677d: Waiting
+be76169c9d2c: Waiting
+7fb72a7d1a8e: Waiting
+cd4d5518888c: Waiting
+71d8aa687ff6: Pushed
+bc3af35429d2: Pushed
+0fd8c731294d: Pushed
+4e8c1ac62530: Pushed
+cd4d5518888c: Pushed
+f0d3b09df3b4: Pushed
+be76169c9d2c: Pushed
+a466089751d3: Pushed
+b7f087dc5dd3: Pushed
+b9a50396677d: Pushed
+7fb72a7d1a8e: Pushed
+latest: digest: sha256:175af5c0c93ea5be06db3e14ca7519fcec0468604f6f32e57c0ee821ca272e89 size: 2628

@@ -1,0 +1,5 @@
+flask==2.0.3
+boto3==1.26.0
+aws-wsgi==0.2.0
+pytest==7.0.1          # For testing (dev only)
+python-dotenv==0.19.2  # For local development
