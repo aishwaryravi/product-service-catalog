@@ -12,3 +12,4 @@
 .aws/
 *.log
 *.backup
+.log
