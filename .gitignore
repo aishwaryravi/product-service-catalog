@@ -12,4 +12,5 @@
 .aws/
 *.log
 *.backup
-.log
+docker-build.log
+docker-push.log
