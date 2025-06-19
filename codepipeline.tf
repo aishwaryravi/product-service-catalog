@@ -1,3 +1,8 @@
+resource "aws_codestarconnections_connection" "github" {
+  name          = "prod-svc-gh-connection"
+  provider_type = "GitHub"
+}
+
 resource "aws_codepipeline" "product_service" {
   name     = "product-service-pipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -12,17 +17,15 @@ resource "aws_codepipeline" "product_service" {
     action {
       name             = "GitHub_Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner                = var.github_repo_owner
-        Repo                 = var.github_repo_name
-        Branch               = var.github_branch
-        OAuthToken           = var.github_token
-        PollForSourceChanges = false
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "${var.github_repo_owner}/${var.github_repo_name}"
+        BranchName       = var.github_branch
       }
     }
   }

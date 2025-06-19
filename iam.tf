@@ -26,7 +26,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:GetObjectVersion",
           "s3:GetBucketVersioning",
           "s3:PutObjectAcl",
-          "s3:PutObject"
+          "s3:PutObject",
         ],
         Effect = "Allow",
         Resource = [
@@ -48,6 +48,13 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Effect = "Allow",
         Resource = ["*"]
+      },
+      {
+        Action = [
+          "codestar-connections:UseConnection"
+        ],
+        Effect = "Allow",
+        Resource = [aws_codestarconnections_connection.github.arn]
       },
       {
         Action = [
@@ -130,4 +137,34 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       }
     ]
   })
+}
+
+
+resource "aws_iam_policy" "terraform_lambda_permissions" {
+  name        = "TerraformLambdaPermissions"
+  description = "Permissions needed for Terraform to manage Lambda"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "lambda:GetPolicy",
+          "lambda:AddPermission",
+          "lambda:RemovePermission",
+          "lambda:GetFunction"
+        ],
+        Resource = [
+          "arn:aws:lambda:us-east-1:767397705569:function:product-service-*"
+        ]
+      }
+    ]
+  })
+}
+
+# Attach this policy to user
+resource "aws_iam_user_policy_attachment" "terraform_lambda" {
+  user       = "poc-terraform"
+  policy_arn = aws_iam_policy.terraform_lambda_permissions.arn
 }
