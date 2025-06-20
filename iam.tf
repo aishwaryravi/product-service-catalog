@@ -157,6 +157,30 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   })
 }
 
+# resource "aws_iam_role_policy" "codebuild_docker_policy" {
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Action = [
+#           "ecr:*",
+#           "logs:*",
+#           "s3:*",
+#           "codebuild:*"
+#         ],
+#         Effect   = "Allow",
+#         Resource = "*"
+#       },
+#       {
+#         Action = [
+#           "docker:*"
+#         ],
+#         Effect   = "Allow",
+#         Resource = "*"
+#       }
+#     ]
+#   })
+# }
 
 resource "aws_iam_policy" "terraform_lambda_permissions" {
   name        = "TerraformLambdaPermissions"

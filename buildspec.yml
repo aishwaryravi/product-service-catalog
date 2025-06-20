@@ -7,6 +7,7 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - pip install awscli
+      - docker --version
 
   pre_build:
     commands:
@@ -20,16 +21,24 @@ phases:
     commands:
       - echo "Building the Docker image..."
       - docker build -t product-service-$ENVIRONMENT .
-      - docker tag product-service-$ENVIRONMENT:latest $REPOSITORY_URI:latest
-      - docker tag product-service-$ENVIRONMENT:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build --progress plain -t product-service-$ENVIRONMENT . 2>&1 | tee docker-build.log
+      - if [ ${PIPESTATUS[0]} -ne 0 ]; then echo "Docker build failed"; cat docker-build.log; exit 1; fi
+      - docker tag product-service-$ENVIRONMENT:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/product-service-$ENVIRONMENT:latest
+      #- docker tag product-service-$ENVIRONMENT:latest $REPOSITORY_URI:latest
+      #- docker tag product-service-$ENVIRONMENT:latest $REPOSITORY_URI:$IMAGE_TAG
 
   post_build:
     commands:
       - echo "Pushing the Docker images..."
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/product-service-$ENVIRONMENT:latest
+      #- docker push $REPOSITORY_URI:latest
+      #- docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "Writing image definitions file..."
-      - printf '[{"name":"product-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      #- printf '[{"name":"product-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"product-service","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/product-service-$ENVIRONMENT:latest > imagedefinitions.json
+
 
 artifacts:
   files: imagedefinitions.json
+
+
