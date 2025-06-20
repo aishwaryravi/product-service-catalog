@@ -18,6 +18,10 @@ resource "aws_codebuild_project" "product_service" {
       name  = "AWS_DEFAULT_REGION"
       value = var.region
     }
+    environment_variable {
+      name  = "AWS_ACCOUNT_ID"
+      value = var.aws_account_id
+    }
   }
 
   source {
