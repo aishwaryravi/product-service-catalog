@@ -22,3 +22,20 @@ output "dynamodb_tables" {
   description = "Map of DynamoDB table names"
   value       = module.dynamodb.table_names
 }
+output "generated_webhook_token" {
+  value       = random_password.webhook_token.result
+  sensitive   = true
+  description = "Generated GitHub webhook token (save this securely)"
+}
+
+output "webhook_url" {
+  description = "The URL of the webhook"
+  value       = aws_codepipeline_webhook.github_webhook.url
+  sensitive   = true
+}
+
+output "webhook_secret" {
+  value       = random_password.webhook_token.result
+  description = "The secret token for GitHub webhook"
+  sensitive   = true
+}

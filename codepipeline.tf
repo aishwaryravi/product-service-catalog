@@ -111,3 +111,33 @@ resource "aws_codepipeline" "product_service" {
     }
   }
 }
+
+# Webhook Configuration
+
+
+resource "random_password" "webhook_token" {
+  length           = 32
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+# reference it in webhook configuration:
+
+
+resource "aws_codepipeline_webhook" "github_webhook" {
+  name            = "github-webhook-trigger"
+  authentication  = "GITHUB_HMAC"
+  target_action   = "Source"
+  target_pipeline = aws_codepipeline.product_service.name
+
+  authentication_configuration {
+    #secret_token =  random_password.webhook_token.result
+    secret_token = var.github_webhook_token
+  }
+
+  filter {
+    json_path    = "$.ref"
+    match_equals = "refs/heads/{Branch}"
+  }
+}
+

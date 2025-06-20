@@ -83,3 +83,22 @@ module "waf" {
   source  = "./modules/waf"
   alb_arn = module.prod_environment.lb_arn # Changed from lb_url to lb_arn
 }
+
+provider "github" {
+  owner = var.github_repo_owner
+  token = var.github_token
+}
+
+resource "github_repository_webhook" "codepipeline" {
+  repository = var.github_repo_name
+
+  configuration {
+    url          = aws_codepipeline_webhook.github_webhook.url
+    content_type = "json"
+    insecure_ssl = false
+    secret       = var.github_webhook_token
+  }
+
+  active = true
+  events = ["push"]
+}
